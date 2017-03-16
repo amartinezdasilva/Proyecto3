@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity
 
         URI uri;
         try {
-            uri = new URI("ws://192.168.1.150:81");
+            uri = new URI("ws://chatpmdm-amartinezdasilva.c9users.io:8081");
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView textView = (TextView)findViewById(R.id.messages);
+                        TextView textView = (TextView)findViewById(R.id.textView);
                         textView.setText(textView.getText() + "\n" + message);
                     }
                 });
