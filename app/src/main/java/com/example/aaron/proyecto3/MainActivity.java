@@ -1,4 +1,4 @@
-package com.example.local.clientews;
+package com.example.aaron.proyecto3;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.aaron.proyecto3.R;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
