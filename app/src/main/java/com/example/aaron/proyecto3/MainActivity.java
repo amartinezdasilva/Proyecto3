@@ -120,28 +120,29 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.user) {
-            AlertDialog.Builder alert= new AlertDialog.Builder(this);
+            AlertDialog.Builder alertt= new AlertDialog.Builder(this);
             final EditText usern=new EditText(this);
             usern.setSingleLine();
             usern.setPadding(50,0,50,0);
-            alert.setTitle("USERNAME");alert.setMessage("Introduzca su nombre de usuario");alert.setView(usern);
-            alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            alertt.setTitle("USERNAME");alertt.setMessage("Introduzca su nombre de usuario");alertt.setView(usern);
+            alertt.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                  usuario=usern.getText().toString();
                 }
             });
-            alert.create();
-            alert.show();
+            alertt.setNegativeButton("Cancelar",null);
+            alertt.create();
+            alertt.show();
 
 
         } else if (id == R.id.conexion) {
                 if(usuario==null){
-                AlertDialog.Builder alertC=new AlertDialog.Builder(this);
-                alertC.setTitle("USERNAME necesario");alertC.setMessage("Necesitamos saber tu nombre de usuario para conectarte ");
-                alertC.setPositiveButton("Aceptar",null);
-                alertC.create();
-                alertC.show();
+                AlertDialog.Builder alerta=new AlertDialog.Builder(this);
+                alerta.setTitle("USERNAME necesario");alerta.setMessage("Necesitamos saber tu nombre de usuario para conectarte ");
+                alerta.setPositiveButton("Aceptar",null);
+                alerta.create();
+                alerta.show();
 
             }else{
                 connectWebSocket();
@@ -189,23 +190,23 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView textView = (TextView)findViewById(R.id.textView);
+                        TextView textView = (TextView)findViewById(R.id.textmensaje);
 
                         String nick;
                         String mens;
                         String destino;
                         int priv;
                        try {
-                            clienteJS = new JSONObject(message);
-                            nick= clienteJS.getString("id");
-                            mens = clienteJS.getString("mensaje");
-                            destino= clienteJS.getString("destino");
-                            priv= clienteJS.getInt("Privado");
+                            jsonm = new JSONObject(message);
+                            nick= jsonm.getString("id");
+                            mens = jsonm.getString("mensaje");
+                            destino= jsonm.getString("destino");
+                            priv= jsonm.getInt("Privado");
 
                             if(priv==1){
                                 if(destino.equals(usuario)){
                                     textView.setText(textView.getText() + "\n" + nick+ "\n" + mens);
-                                }
+                                }else textView.setText(textView.getText() + "\n" + nick+ "\n" + mens);
 
                             }
                         } catch (JSONException e) {
@@ -227,37 +228,40 @@ public class MainActivity extends AppCompatActivity
                 Log.i("Websocket", "Error " + e.getMessage());
             }
         };
-
+//
         mWebSocketClient.connect();
 
     }
     public void sendMessage() {
-        EditText mens = (EditText)findViewById(R.id.message);
+        EditText editText = (EditText)findViewById(R.id.message);
         EditText destino = (EditText)findViewById(R.id.destino);
         CheckBox checkBox = (CheckBox)findViewById(R.id.priv);
 
-        int priv;
 
-        String destin = destino.getText().toString();
-        String men = mens.getText().toString();
+
+
+        String men = editText.getText().toString();
+        int priv;
         if(checkBox.isChecked()) {
            priv=1 ;
         }else{
             priv = 0;
-        }
-        jsonm = new JSONObject();
+        }String destin = destino.getText().toString();
+        clienteJS = new JSONObject();
         try {
             clienteJS.put("id",usuario);
-            clienteJS.put("msg",mens);
-            clienteJS.put("esPrivado",priv);
-            clienteJS.put("dst",destino);
+            clienteJS.put("mensaje",men);
+            clienteJS.put("Privado",priv);
+            clienteJS.put("destino",destin);
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mWebSocketClient.send(jsonm.toString());
+        mWebSocketClient.send(clienteJS.toString());
 
+        editText.setText("");
+        destino.setText("");
 
     }
 }
